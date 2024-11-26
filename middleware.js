@@ -49,6 +49,7 @@ catch(e){
 }
 
 module.exports.newInstructor=async(req,res,next)=>{
+  try{
     const {auth}= req.query;
     const user = await User.findById(auth);
     const teacher = new Teacher({ id: auth });
@@ -56,6 +57,10 @@ module.exports.newInstructor=async(req,res,next)=>{
     await user.save();
     await teacher.save();
     res.json(teacher);
+  }
+  catch(err){
+    res.json("Error occured",err);
+  }
 }
 
 
@@ -67,21 +72,21 @@ module.exports.upDateStudent=async(req,res,next)=>{
   const course = await Course.findById(id);
   const owner= course.owner;
   const teacher=await Teacher.findOne({id:owner});
-  console.log(teacher);
-  
-  // console.log(course);
   
   if(st){
     st.myLearnings.push(id);
     await st.save();
     course.students.push(auth);
     res.json("Student Updated");
-    teacher.students.push(id);
+    if(!teacher.students.includes(auth)){
+      teacher.push(auth);
+    }
   }
   else{
     const st= new Student({id:auth});
     st.myLearnings.push(id);
     course.students.push(id);
+    teacher.students.push(auth);
     await st.save();
     res.json("New User Created and updated");
   }

@@ -53,11 +53,9 @@ module.exports.signUp = async (req, res,next) => {
 module.exports.loginIn = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     if (!(email && password)) {
       return res.json(new ExpressError(400, 'Please Enter All Details'));
     }
-
     const user = await User.findOne({ email });
     if(!user){
       return res.json(new ExpressError(400, 'User is not Registerd'));
@@ -127,23 +125,27 @@ module.exports.verifyUser=async(req,res)=>{
 
 
 module.exports.mylearning=async(req,res)=>{
-  const token=req.cookies.token;
-  const verify=jwt.verify(token,'MySecretKey');
-  const id=verify.id;
-  const user=await Student.findOne({id:id}).populate("myLearnings");
+  const {auth}= req.query;
+
+  const user=await Student.findOne({id:auth}).populate("myLearnings");
+  if(user){
   const mylearning=user.myLearnings;
   res.json({
     mylearning
   })
+  }
+  
+
 }
 
 module.exports.myStudent=async(req,res)=>{
   try{
     const {auth}=req.query;
-    const teacher=await Teacher.findOne({id:auth}).populate("students");
+    const teacher=await Teacher.findOne({id:auth}).populate("students"); 
     res.json(teacher.students); 
   }
   catch(err){
     res.json(err);
   }
 }
+

@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());  
 app.use(cookieParser());
 app.use(methodOverride('_method'))
-const allowedOrigins = ['http://localhost:3001', 'http://localhost:3002'];
+const allowedOrigins = ['http://localhost:3001'];
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -31,7 +31,7 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   credentials: true
 }));
 mongoose

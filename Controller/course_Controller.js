@@ -15,10 +15,7 @@ module.exports.createCourse = async (req, res) => {
   try {
     const{auth}=req.query;
     let course = new Courses(req.body);
-    // const user=await User.findById(auth);
     course.owner=auth;
-    // user.courses.push(course._id);
-    // await user.save();
     await course.save();
     res.status(200).send("Course Saved Successfully");
   } catch (e) {
