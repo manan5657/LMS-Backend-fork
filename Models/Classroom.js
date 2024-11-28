@@ -3,6 +3,14 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const classSchema = new Schema({
+    teacher:{
+        type:Schema.Types.ObjectId,
+        ref:"User"
+    },
+    roomCode:{
+        type:String,
+        default:null,
+    },
     course: {
         type: Schema.Types.ObjectId,
         ref: "Course",

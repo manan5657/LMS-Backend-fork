@@ -6,6 +6,7 @@ const app = express();
 const mongoose = require("mongoose");
 const courseRouter = require("./Routes/course_router");
 const userRouter=require('./Routes/userRouter');
+const classRouter=require('./Routes/class_router');
 const paymentRouter=require('./Routes/paymentRouter');
 const cors=require('cors');
 const methodOverride=require('method-override');
@@ -43,6 +44,7 @@ mongoose
 app.use("/api/admin", courseRouter);
 app.use("/api",userRouter);
 app.use("/api",paymentRouter);
+app.use("/api",classRouter)
 
 
 app.get('/api/getkey',(req,res)=>{
