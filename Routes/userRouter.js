@@ -7,8 +7,9 @@ router.post("/signup", userController.signUp, greetMail);
 
 router.post("/login", userController.loginIn);
 router.get("/logout", userController.logOut);
+// router.post("/auth/google", userController.googleAuth);
 router.get("/verifyUser", userController.verifyUser);
-router.get("/mylearning",userController.mylearning)
-router.get("/mystudents",userController.myStudent);
+router.get("/mylearning", userController.mylearning);
+router.get("/mystudents", userController.myStudent);
 
 module.exports = router;
