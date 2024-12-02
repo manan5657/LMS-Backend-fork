@@ -83,6 +83,8 @@ module.exports.loginIn = async (req, res) => {
   }
 };
 
+module.exports.LoginWithGoogle = async (req, res) => {};
+
 module.exports.logOut = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
