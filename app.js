@@ -14,6 +14,7 @@ const session = require("express-session");
 
 const cookieParser = require("cookie-parser");
 const { PassPort } = require("./utils/passport");
+const { GoogleProvider } = require("./utils/GoogleStrategy");
 
 const MongoUrl = process.env.MONGOURL;
 
@@ -33,6 +34,8 @@ app.use(methodOverride("_method"));
 // Google PassP
 app.use(PassPort.initialize());
 app.use(PassPort.session());
+
+PassPort.use(GoogleProvider);
 
 const allowedOrigins = ["http://localhost:3001"];
 
