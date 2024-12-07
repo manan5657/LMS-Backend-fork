@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const ExpressError = require("../utils/ExpressError");
 const Teacher = require("../Models/Teacher");
 const Student = require("../Models/Student");
+const JWTSERVICE = require("../utils/jwt");
 
 module.exports.signUp = async (req, res, next) => {
   try {
@@ -81,6 +82,67 @@ module.exports.loginIn = async (req, res) => {
     console.error(error);
     return res.json(new ExpressError(400, error));
   }
+};
+
+module.exports.LoginWithGoogle = async (profile, cb) => {
+  const check_user = await User.findOne({ email: profile?._json.email });
+
+  if (check_user) {
+    const token = JWTSERVICE.generateToken({ id: check_user._id });
+    cb(null, token);
+    return;
+  }
+
+  const user = await User.create({
+    username: profile?._json.name,
+    email: profile?._json.email,
+    password: Date.now().toString() + 1000 * 60,
+  });
+
+  const token = JWTSERVICE.generateToken({ id: user._id });
+  cb(null, token);
+  return;
+
+  res.status(200).json({
+    user,
+  });
+};
+
+module.exports.VerifyToken = async (req, res, next) => {
+  try {
+    const authToken = req.headers["authorization"] || "";
+
+    if (!authToken || !authToken.startsWith("Bearer ")) {
+      throw new Error("please login first");
+    }
+    const token = authToken.split(" ")[1];
+    // console.log(token);
+
+    if (!token) {
+      throw new Error("please provide valid token");
+    }
+
+    const payload = JWTSERVICE.verifyToken(token, "id");
+
+    req.user = payload;
+    next();
+  } catch (error) {
+    next(new Error(error.message));
+  }
+};
+
+module.exports.VerifyUsergoogle = async (req, res, next) => {
+  const vuser = await User.findById(req.user);
+  // console.log(vuser);
+  if (!vuser) {
+    return res.status(400).send({
+      msg: "User Not found",
+    });
+  }
+
+  res.status(200).send({
+    user: vuser,
+  });
 };
 
 module.exports.logOut = (req, res) => {

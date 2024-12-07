@@ -7,6 +7,7 @@ const User = require("./Models/user.js");
 const Teacher = require("./Models/Teacher.js");
 const Course = require("./Models/courses.js");
 const Student = require("./Models/Student.js");
+const Schedule = require("./Models/Classroom.js");
 
 module.exports.validateCourse = (req, res, next) => {
   let { error } = Schema.courseSchema.validate(req.body);
@@ -89,4 +90,51 @@ module.exports.upDateStudent = async (req, res, next) => {
   await course.save();
 };
 
+<<<<<<< HEAD
 
+=======
+// module.exports.validatemeeting = async (req, res, next) => {
+//   try {
+//     const { teacher } = req.query;
+//     const { date, time_start, time_to } = req.body;
+
+//     // Check if any existing class for the teacher overlaps with the new class
+//     const conflictingClass = await Schedule.findOne({
+//       teacher,
+//       date,
+//       $or: [
+//         {
+//           // New class starts during an existing class
+//           time_start: { $lt: time_to, $gte: time_start },
+//         },
+//         {
+//           // New class ends during an existing class
+//           time_to: { $gt: time_start, $lte: time_to },
+//         },
+//         {
+//           // New class completely overlaps an existing class
+//           time_start: { $lte: time_start },
+//           time_to: { $gte: time_to },
+//         },
+//       ],
+//     });
+
+//     if (conflictingClass) {
+//       return res.json({
+//         success: false,
+//         message:
+//           "Schedule conflict: The teacher already has a class during this time.",
+//       });
+//     }
+
+//     next(); // No conflicts, proceed to the scheduling logic
+//   } catch (err) {
+//     console.error(err);
+//     res.json({
+//       success: false,
+//       message: "Error checking for schedule conflicts",
+//     });
+//   }
+// };
+// Replace with the correct path to your Schedule model
+>>>>>>> 88ac04d3fd8ef0aba0fed4caf28dabff9a5acc67
