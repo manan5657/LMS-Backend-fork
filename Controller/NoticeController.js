@@ -20,3 +20,14 @@ module.exports.postNotice= async(req,res,next)=>{
         res.json(err)
     }
 }
+
+module.exports.getNotice=async(req,res)=>{
+    try{
+        const {course}= req.query;
+        const notices=await Notice.find({course:course});
+        await res.json(notices);
+    }
+    catch(err){
+        res.json(err);
+    }
+}
