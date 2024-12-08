@@ -437,6 +437,35 @@ module.exports.classScheduleMail = async (req, res) => {
 };
 
 
+module.exports.mailOtp=async(req,res,next)=>{
 
+  try{
+  const otp= Math.floor(Math.random()*9000+100);
+  const {email} = req.body
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "learnlynx9@gmail.com", // Your Gmail address
+      pass: "iklv jzwv gfrs tbgl", // Your Gmail App Password
+    },
+  });
+
+  const mailOptions = {
+    from: "learnlynx9@gmail.com", // Sender's address
+    to: `${email}`, // List of receivers
+    subject: "OTP Authorization", // Subject line
+    text:`Your OTP is ${otp}`
+  };
+  await transporter.sendMail(mailOptions);
+
+  res.json(otp);
+  
+  }
+  catch(err){
+    res.json("Failed to send OTP");
+  }
+
+
+}
 
 

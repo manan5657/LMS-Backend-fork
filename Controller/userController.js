@@ -192,3 +192,35 @@ module.exports.myStudent = async (req, res) => {
     res.json(err);
   }
 };
+
+
+module.exports.verifyEmail= async(req,res,next)=>{
+  try{  
+    const {email} = req.body;
+    const user = await User.findOne({email:email});
+    if(user){
+     return next();
+    }
+    return res.json(false);
+  }
+  catch(err){
+    res.json(err);
+  }
+}
+
+module.exports.resetPassword=async(req,res)=>{
+  try{
+    const {email,newPassword} = req.body;
+    const user = await User.findOne({email:email});
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashedPassword;
+    await user.save();
+    res.json("Password Updated successfully");
+  }
+  catch(err){
+    res.json(err);
+  }
+}
+
+

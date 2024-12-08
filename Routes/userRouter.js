@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../Controller/userController.js");
-const { greetMail } = require("../mail.js");
+const { greetMail ,mailOtp} = require("../mail.js");
 const passport = require("../utils/passport.js");
 const { resolveContent } = require("nodemailer/lib/shared/index.js");
 
@@ -9,6 +9,8 @@ router.post("/signup", userController.signUp, greetMail);
 
 router.post("/login", userController.loginIn);
 router.get("/logout", userController.logOut);
+router.post("/verifyEmail",userController.verifyEmail,mailOtp);
+router.post("/resetPassword",userController.resetPassword);
 
 router.get(
   "/auth/logingoogle",

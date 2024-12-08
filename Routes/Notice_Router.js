@@ -8,7 +8,4 @@ router.get("/getNotice",getNotice);
 
 
 
-
-
-
 module.exports = router;
