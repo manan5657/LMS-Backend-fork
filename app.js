@@ -8,6 +8,7 @@ const courseRouter = require("./Routes/course_router");
 const userRouter = require("./Routes/userRouter");
 const classRouter = require("./Routes/class_router");
 const paymentRouter = require("./Routes/paymentRouter");
+const NoticeRouter= require("./Routes/Notice_Router");
 const cors = require("cors");
 const methodOverride = require("method-override");
 const session = require("express-session");
@@ -63,6 +64,7 @@ app.use("/api/admin", courseRouter);
 app.use("/api", userRouter);
 app.use("/api", paymentRouter);
 app.use("/api", classRouter);
+app.use("/api",NoticeRouter)
 
 app.get("/api/getkey", (req, res) => {
   res.status(200).send({ key: process.env.RAZORPAY_API_KEY });

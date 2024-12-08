@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const User=require('./Models/user.js');
 const Course=require('./Models/courses.js');
 
+
 module.exports.greetMail = (req, res) => {
   const { username, email } = req.body;
 
@@ -307,5 +308,135 @@ module.exports.teacherMail = async(req, res) => {
       res.json("Course Succesully buyed");
     });
 };
+
+
+
+
+
+
+module.exports.classScheduleMail = async (req, res) => {
+  try {
+    const { course } = req.query;
+    const { date, time_start, time_to } = req.body;
+
+    // Fetch course details
+    const response = await Course.findById(course)
+      .populate("owner students")
+      .exec();
+
+    if (!response) {
+      return res.json({ error: "Course not found" });
+    }
+
+    const studentEmails = response.students.map((student) => student.email).join(",");
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "learnlynx9@gmail.com", // Your Gmail address
+        pass: "iklv jzwv gfrs tbgl", // Your Gmail App Password
+      },
+    });
+
+    const mailOptions = {
+      from: "learnlynx9@gmail.com", // Sender's address
+      bcc: studentEmails, // List of receivers
+      subject: "Class Scheduled - LearnLynx", // Subject line
+      html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Scheduled Notification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      background: #007bff;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+      border-radius: 8px 8px 0 0;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .content {
+      padding: 20px;
+    }
+    .content h2 {
+      margin-top: 0;
+      color: #333;
+    }
+    .details {
+      margin: 15px 0;
+      padding: 15px;
+      background: #f9f9f9;
+      border-left: 4px solid #007bff;
+    }
+    .details p {
+      margin: 5px 0;
+    }
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <h1>Class Scheduled</h1>
+    </div>
+    <div class="content">
+      <h2>Dear Students,</h2>
+      <p>We are excited to inform you that your class has been successfully scheduled!</p>
+      <div class="details">
+        <p><strong>Course Name:</strong> ${response.title}</p>
+        <p><strong>Scheduled By:</strong> ${response.owner.username}</p>
+        <p><strong>Date:</strong> ${date}</p>
+        <p><strong>Time:</strong> ${time_start} - ${time_to}</p>
+      </div>
+      <p>Please make sure to join the class on time. If you have any questions, feel free to contact us.</p>
+    </div>
+    <div class="footer">
+      <p>Thank you for being a part of our learning community!</p>
+      <p>&copy; LearnLynx, All Rights Reserved.</p>
+    </div>
+  </div>
+</body>
+</html>`,
+    };
+
+    // Send email
+   await transporter.sendMail(mailOptions);
+
+    res.json(
+     "Class schedule Successfully"
+    );
+  } catch (err) {
+    console.error("Error scheduling class email:", err);
+    res.json("Failed To Schedule Class");
+  }
+};
+
+
+
 
 

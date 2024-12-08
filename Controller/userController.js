@@ -102,10 +102,6 @@ module.exports.LoginWithGoogle = async (profile, cb) => {
   const token = JWTSERVICE.generateToken({ id: user._id });
   cb(null, token);
   return;
-
-  res.status(200).json({
-    user,
-  });
 };
 
 module.exports.VerifyToken = async (req, res, next) => {

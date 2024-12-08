@@ -4,17 +4,17 @@ const {
   scheduleClass,
   getLiveClasses,
   getUpcomingclasses,
-  sendBulkEmail,
 } = require("../Controller/ClassController");
 const { validatemeeting } = require("../middleware.js");
+const {classScheduleMail} = require('../mail.js');
 
 router.post(
   "/scheduleClass",
-  // validatemeeting
-  scheduleClass
+  validatemeeting,
+  scheduleClass,
+  classScheduleMail
 );
 router.get("/liveClasses", getLiveClasses);
-router.post("/sendBulkEmail", sendBulkEmail);
 router.get("/upComingClasses", getUpcomingclasses);
 
 module.exports = router;
