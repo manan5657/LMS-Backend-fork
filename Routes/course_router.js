@@ -1,17 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const courseController = require("../Controller/course_Controller");
-const {validateCourse}=require("../middleware.js")
+const { validateCourse } = require("../middleware.js");
 
 router.get("/courses", courseController.fetchCourses);
 
-router.post("/create",validateCourse, courseController.createCourse);
+router.post("/create", validateCourse, courseController.createCourse);
 
 router.get("/course/:id", courseController.getCourse);
 
-router.get("/dashCourses",courseController.dashCourses)
+router.get("/dashCourses", courseController.dashCourses);
 
-router.patch("/course/:id/edit", validateCourse,courseController.editCourse);
+router.post("/dashboardreq", courseController.getTeacherDashboardData);
+
+router.patch("/course/:id/edit", validateCourse, courseController.editCourse);
 
 router.delete("/course/:id/delete", courseController.deleteCourse);
 
